@@ -3,262 +3,590 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Harry O'Brien - Composer Portfolio</title>
+  <title>Harry O'Brien — Composer Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-0: #08080a;
+      --bg-1: #0e0e10;
+      --bg-2: #141417;
+      --bg-3: #1c1c20;
+      --bg-4: #26262b;
+      --grey-1: #f0f0f2;
+      --grey-2: #c8c8cc;
+      --grey-3: #9a9aa0;
+      --grey-4: #6a6a70;
+      --grey-5: #3a3a40;
+      --grey-6: #2a2a2f;
+      --accent: #d8d8dc;
     }
-    
+
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: #fafaf8;
-      color: #1a1a1a;
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      background-color: var(--bg-0);
+      color: var(--grey-1);
+      font-weight: 300;
+      letter-spacing: 0.2px;
+      line-height: 1.6;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    /* Fixed Header */
-    header {
+    /* ---------- Background gradients (fixed + scrolling layers) ---------- */
+    .gradient-fixed {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background-color: #0a0a0a;
-      padding: 1.5rem 3rem;
+      inset: 0;
+      z-index: -3;
+      background:
+        radial-gradient(ellipse at 15% 10%, rgba(70, 70, 80, 0.18), transparent 45%),
+        radial-gradient(ellipse at 85% 35%, rgba(50, 55, 65, 0.14), transparent 55%),
+        radial-gradient(ellipse at 50% 90%, rgba(80, 80, 85, 0.10), transparent 50%),
+        linear-gradient(180deg, #08080a 0%, #0e0e12 50%, #08080a 100%);
+    }
+
+    .gradient-scroll {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 400vh;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg,
+          transparent 0%,
+          rgba(45, 45, 55, 0.20) 18%,
+          transparent 33%,
+          rgba(60, 55, 65, 0.14) 50%,
+          transparent 66%,
+          rgba(50, 55, 60, 0.18) 82%,
+          transparent 100%);
+    }
+
+    .gradient-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, #2a2a32, transparent 70%); top: 20%; left: -150px; }
+    .orb-2 { width: 600px; height: 600px; background: radial-gradient(circle, #25252b, transparent 70%); top: 60%; right: -200px; }
+
+    /* ---------- Top Banner ---------- */
+    header {
+      position: relative;
+      height: 280px;
+      background: linear-gradient(180deg, #050507 0%, #0c0c10 100%);
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      border-bottom: 1px solid var(--grey-6);
+      overflow: hidden;
+    }
+
+    #glitch-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      opacity: 0.55;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      pointer-events: none;
     }
 
     .name {
-      font-size: 1.5rem;
-      font-weight: 300;
-      letter-spacing: 1px;
-      color: #b8b8b8;
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      font-size: 4rem;
+      font-weight: 400;
+      letter-spacing: 8px;
+      color: var(--grey-1);
+      margin-bottom: 0.75rem;
+      text-shadow: 0 2px 30px rgba(200, 200, 220, 0.08);
     }
 
     .title {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 1.8rem;
-      font-weight: 200;
-      letter-spacing: 2px;
-      color: #c0c0c0;
-    }
-
-    /* Main Content */
-    main {
-      margin-top: 100px;
-      padding: 3rem 6rem;
-      max-width: 1400px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    section {
-      margin-bottom: 4rem;
-    }
-
-    .section-title {
-      font-size: 1.3rem;
-      font-weight: 400;
-      letter-spacing: 1.5px;
-      color: #1a1a1a;
-      margin-bottom: 2rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      letter-spacing: 9px;
+      color: var(--grey-3);
       text-transform: uppercase;
     }
 
-    .divider {
-      width: 85%;
-      height: 1px;
-      background-color: #0a0a0a;
-      margin: 3rem auto;
+    /* ---------- Menu ---------- */
+    .menu-container {
+      position: fixed;
+      top: 1.5rem;
+      right: 2rem;
+      z-index: 1000;
     }
 
-    /* Bio Section */
-    .bio-text {
-      font-size: 1.1rem;
-      line-height: 1.8;
-      color: #2a2a2a;
-      font-weight: 300;
-      max-width: 900px;
-    }
-
-    /* Audio Player Styling */
-    .audio-container {
-      background-color: #0a0a0a;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border: none;
-    }
-
-    .audio-title {
-      color: #c0c0c0;
-      font-size: 1.1rem;
-      font-weight: 300;
-      margin-bottom: 1rem;
-      letter-spacing: 0.5px;
-    }
-
-    audio {
-      width: 100%;
-      height: 40px;
-      outline: none;
-    }
-
-    audio::-webkit-media-controls-panel {
-      background-color: #a8a8a8;
-    }
-
-    /* PDF Container */
-    .pdf-container {
-      background-color: #0a0a0a;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border: none;
+    .menu-button {
+      width: 48px;
+      height: 48px;
+      background: rgba(20, 20, 24, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--grey-5);
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .menu-button:hover {
+      background: rgba(40, 40, 48, 0.85);
+      border-color: var(--grey-3);
+    }
+
+    .menu-button span {
+      width: 22px;
+      height: 1px;
+      background: var(--grey-1);
+      margin: 3px 0;
+      transition: all 0.3s ease;
+    }
+
+    .menu-container:hover .menu-button span:nth-child(1) { width: 22px; }
+    .menu-container:hover .menu-button span:nth-child(2) { width: 16px; }
+    .menu-container:hover .menu-button span:nth-child(3) { width: 22px; }
+
+    .menu-dropdown {
+      position: absolute;
+      top: 58px;
+      right: 0;
+      min-width: 220px;
+      background: rgba(14, 14, 18, 0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--grey-5);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    }
+
+    .menu-container:hover .menu-dropdown,
+    .menu-container.active .menu-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .menu-dropdown a {
+      display: block;
+      padding: 0.95rem 1.5rem;
+      color: var(--grey-2);
+      text-decoration: none;
+      letter-spacing: 2px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      font-weight: 400;
+      border-bottom: 1px solid var(--bg-3);
+      transition: all 0.25s ease;
+    }
+
+    .menu-dropdown a:last-child { border-bottom: none; }
+
+    .menu-dropdown a:hover {
+      background: var(--bg-3);
+      color: var(--grey-1);
+      padding-left: 2rem;
+    }
+
+    /* ---------- Main ---------- */
+    main {
+      padding: 5rem 5rem 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    section { margin-bottom: 5rem; }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 500;
+      letter-spacing: 5px;
+      color: var(--grey-1);
+      margin-bottom: 3rem;
+      text-transform: uppercase;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--grey-6);
+    }
+
+    .divider {
+      width: 75%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--grey-5), transparent);
+      margin: 4rem auto;
+    }
+
+    /* ---------- Bio ---------- */
+    .bio-text {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--grey-2);
+      font-weight: 300;
+      max-width: 850px;
+    }
+
+    /* ---------- Composition Layout ---------- */
+    .composition {
+      margin-bottom: 4rem;
+    }
+
+    .composition-title {
+      font-family: 'Space Grotesk', sans-serif;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 400;
+      letter-spacing: 3px;
+      color: var(--grey-1);
+      margin-bottom: 2rem;
+    }
+
+    .composition-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
       align-items: center;
     }
 
-    .pdf-title {
-      color: #c0c0c0;
-      font-size: 1.1rem;
+    .composition-text {
+      color: var(--grey-2);
+      line-height: 1.8;
+      font-size: 0.98rem;
       font-weight: 300;
-      letter-spacing: 0.5px;
     }
 
-    .pdf-link {
-      color: #b8b8b8;
+    .composition-text .audio-wrap {
+      margin-top: 1.25rem;
+    }
+
+    .composition-media {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--bg-2);
+      border: 1px solid var(--grey-6);
+      overflow: hidden;
+      position: relative;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .composition-media:hover {
+      border-color: var(--grey-4);
+    }
+
+    .composition-media iframe,
+    .composition-media img {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      object-fit: cover;
+    }
+
+    .composition-media a {
+      display: block;
+      width: 100%;
+      height: 100%;
       text-decoration: none;
-      padding: 0.6rem 1.5rem;
-      border: 1px solid #c0c0c0;
-      transition: all 0.3s ease;
-      font-size: 0.95rem;
-      letter-spacing: 0.5px;
     }
 
-    .pdf-link:hover {
-      background-color: #c0c0c0;
-      color: #0a0a0a;
+    /* Score placeholder card (for acoustic works without an image) */
+    .score-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background:
+        linear-gradient(135deg, #1a1a1f 0%, #25252b 100%);
+      color: var(--grey-2);
+      text-decoration: none;
+      letter-spacing: 3px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      transition: all 0.35s ease;
+      position: relative;
     }
 
-    /* Gallery Section */
+    .score-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg,
+          transparent 0px,
+          transparent 24px,
+          rgba(255, 255, 255, 0.02) 24px,
+          rgba(255, 255, 255, 0.02) 25px);
+      pointer-events: none;
+    }
+
+    .score-placeholder span {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      color: var(--grey-1);
+      margin-bottom: 0.5rem;
+      letter-spacing: 4px;
+    }
+
+    .score-placeholder small {
+      font-size: 0.7rem;
+      color: var(--grey-3);
+      letter-spacing: 2px;
+    }
+
+    .score-placeholder:hover {
+      background: linear-gradient(135deg, #1f1f24 0%, #2c2c32 100%);
+    }
+
+    /* Audio styling */
+    .audio-wrap audio {
+      width: 100%;
+      height: 36px;
+      outline: none;
+      filter: invert(0.92) hue-rotate(180deg) contrast(0.85);
+    }
+
+    /* ---------- Gallery ---------- */
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
       margin-top: 2rem;
     }
 
     .gallery-item {
-      background-color: #e8e8e6;
-      height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #888;
-      font-size: 0.9rem;
-      border: 1px solid #d0d0ce;
+      aspect-ratio: 1;
+      background: var(--bg-2);
+      border: 1px solid var(--grey-6);
+      overflow: hidden;
+      position: relative;
     }
 
     .gallery-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      filter: grayscale(0.4) brightness(0.95);
+      transition: all 0.5s ease;
     }
 
-    /* Responsive Design */
+    .gallery-item:hover img {
+      filter: grayscale(0) brightness(1);
+      transform: scale(1.04);
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      margin-top: 5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--grey-6);
+      text-align: center;
+      color: var(--grey-4);
+      font-size: 0.82rem;
+      letter-spacing: 1px;
+    }
+
+    footer a {
+      color: var(--grey-3);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    footer a:hover {
+      color: var(--grey-1);
+      border-bottom-color: var(--grey-3);
+    }
+
+    /* ---------- Responsive ---------- */
     @media (max-width: 768px) {
-      header {
-        padding: 1rem 1.5rem;
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-
-      .title {
-        position: static;
-        transform: none;
-        font-size: 1.3rem;
-      }
-
-      .name {
-        font-size: 1.2rem;
-      }
-
-      main {
-        padding: 2rem 1.5rem;
-      }
-
-      .divider {
-        width: 90%;
-      }
+      header { height: 200px; }
+      .name { font-size: 2.2rem; letter-spacing: 4px; }
+      .title { font-size: 0.75rem; letter-spacing: 5px; }
+      main { padding: 3rem 1.25rem; }
+      .composition-body { grid-template-columns: 1fr; gap: 1.5rem; }
+      .menu-container { top: 1rem; right: 1rem; }
+      .section-title { font-size: 1.05rem; letter-spacing: 3px; }
     }
   </style>
 </head>
 <body>
+  <!-- Background layers -->
+  <div class="gradient-fixed"></div>
+  <div class="gradient-scroll"></div>
+  <div class="gradient-orb orb-1"></div>
+  <div class="gradient-orb orb-2"></div>
+
+  <!-- Floating menu -->
+  <div class="menu-container" id="menu">
+    <div class="menu-button" id="menuBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </div>
+    <nav class="menu-dropdown">
+      <a href="#bio">Bio</a>
+      <a href="#electronic-works">Electronic Works</a>
+      <a href="#acoustic-works">Acoustic Works</a>
+      <a href="#code">Code</a>
+      <a href="#gallery">Gallery</a>
+    </nav>
+  </div>
+
+  <!-- Header / banner with glitch -->
   <header>
-    <div class="name">Harry O'Brien</div>
-    <div class="title">Composer Portfolio</div>
+    <canvas id="glitch-canvas"></canvas>
+    <div class="header-content">
+      <div class="name">HARRY O'BRIEN</div>
+      <div class="title">Composer Portfolio</div>
+    </div>
   </header>
 
   <main>
-    <!-- Bio Section -->
+    <!-- Bio -->
     <section id="bio">
       <h2 class="section-title">Bio</h2>
       <p class="bio-text">
-      Harry is currently undertaking a PhD in Electroacoustic Composition at the University of Manchester. His research focuses on the sonification of dynamic optimisation algorithms and the development of machine-learning approaches for generative compositional practices. He is an alumnus of the University of Leeds, where he completed a BSc in Mathematics and Music, followed by an MMus in Critical and Experimental Composition.  
+        Harry is currently undertaking a PhD in Electroacoustic Composition at the University of Manchester. His research focuses on the sonification of dynamic optimisation algorithms and the development of machine-learning approaches for generative compositional practices. He is an alumnus of the University of Leeds, where he completed a BSc in Mathematics and Music, followed by an MMus in Critical and Experimental Composition.
       </p>
     </section>
 
     <div class="divider"></div>
 
-    <!-- Electronic Works Section -->
+    <!-- Electronic Works -->
     <section id="electronic-works">
       <h2 class="section-title">Electronic Works</h2>
-      
-      <div class="audio-container">
-        <div class="audio-title">Tone_Poem</div>
-        <audio controls>
-          <source src="https://github.com/HC-OBrien/Compositions.github.io/releases/download/Tone_Poem/Tone_Poem.mp3" type="audio/mpeg">
-        </audio>
+
+      <div class="composition">
+        <h3 class="composition-title">Tone Poem</h3>
+        <div class="composition-body">
+          <div class="composition-text">
+            <p>[Add a short description of Tone Poem here.]</p>
+            <div class="audio-wrap">
+              <audio controls>
+                <source src="https://github.com/HC-OBrien/Compositions.github.io/releases/download/Tone_Poem/Tone_Poem.mp3" type="audio/mpeg">
+              </audio>
+            </div>
+          </div>
+          <div class="composition-media">
+            <!-- Replace YOUR_VIDEO_ID with the actual YouTube ID -->
+            <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" title="Tone Poem" allowfullscreen></iframe>
+          </div>
+        </div>
       </div>
 
-      <div class="audio-container">
-        <div class="audio-title">Plain Desaturation</div>
-        <audio controls>
-          <source src="https://github.com/HC-OBrien/Compositions.github.io/releases/download/Plain_Desaturation/Plain.Desaturation.export.1.mp3" type="audio/mpeg">
-        </audio>
+      <div class="composition">
+        <h3 class="composition-title">Plain Desaturation</h3>
+        <div class="composition-body">
+          <div class="composition-text">
+            <p>[Add a short description of Plain Desaturation here.]</p>
+            <div class="audio-wrap">
+              <audio controls>
+                <source src="https://github.com/HC-OBrien/Compositions.github.io/releases/download/Plain_Desaturation/Plain.Desaturation.export.1.mp3" type="audio/mpeg">
+              </audio>
+            </div>
+          </div>
+          <div class="composition-media">
+            <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" title="Plain Desaturation" allowfullscreen></iframe>
+          </div>
+        </div>
       </div>
     </section>
 
     <div class="divider"></div>
 
-    <!-- Acoustic Works Section -->
+    <!-- Acoustic Works -->
     <section id="acoustic-works">
       <h2 class="section-title">Acoustic Works</h2>
-      
-      <div class="pdf-container">
-        <div class="pdf-title">Disc...Temp...</div>
-        <a href="https://github.com/HC-OBrien/Compositions.github.io/releases/download/Disc_Temp/Disc.Temp.pdf" class="pdf-link" target="_blank">View Score</a>
-        
+
+      <div class="composition">
+        <h3 class="composition-title">Disc...Temp...</h3>
+        <div class="composition-body">
+          <div class="composition-text">
+            <p>[Add a short description of Disc...Temp... here.]</p>
+          </div>
+          <div class="composition-media">
+            <a href="https://github.com/HC-OBrien/Compositions.github.io/releases/download/Disc_Temp/Disc.Temp.pdf" target="_blank" rel="noopener">
+              <!-- Swap this <div> for <img src="Scores/disc-temp-thumb.jpg" alt="..."> when you have artwork -->
+              <div class="score-placeholder">
+                <span>Disc...Temp...</span>
+                <small>View Score</small>
+              </div>
+            </a>
+          </div>
+        </div>
       </div>
 
-      <div class="pdf-container">
-        <div class="pdf-title">Two Pencils</div>
-        <a href="https://github.com/HC-OBrien/Compositions.github.io/releases/download/Two_Pencils/Two.Pencils.pdf" class="pdf-link" target="_blank">View Score</a>
-        
+      <div class="composition">
+        <h3 class="composition-title">Two Pencils</h3>
+        <div class="composition-body">
+          <div class="composition-text">
+            <p>[Add a short description of Two Pencils here.]</p>
+          </div>
+          <div class="composition-media">
+            <a href="https://github.com/HC-OBrien/Compositions.github.io/releases/download/Two_Pencils/Two.Pencils.pdf" target="_blank" rel="noopener">
+              <div class="score-placeholder">
+                <span>Two Pencils</span>
+                <small>View Score</small>
+              </div>
+            </a>
+          </div>
+        </div>
       </div>
-
     </section>
 
     <div class="divider"></div>
 
-    <!-- Gallery Section -->
+    <!-- Code -->
+    <section id="code">
+      <h2 class="section-title">Code</h2>
+
+      <div class="composition">
+        <h3 class="composition-title">Sonamic</h3>
+        <div class="composition-body">
+          <div class="composition-text">
+            <p>Sonamic is an open-source application that displays sonifications and visualisations of dynamic optimisation algorithms, so that users may better understand their algorithmic behaviours.</p>
+          </div>
+          <div class="composition-media">
+            <a href="#" target="_blank" rel="noopener">
+              <div class="score-placeholder">
+                <span>Sonamic</span>
+                <small>View Project</small>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Gallery -->
     <section id="gallery">
       <h2 class="section-title">Gallery</h2>
       <div class="gallery-grid">
@@ -272,15 +600,147 @@
           <img src="Gallery/50a50fa9-ba3c-491d-9f98-88bd42f12e09.jpg" alt="Light Night 3">
         </div>
       </div>
-
     </section>
 
-    <div class="divider"></div>
-    <p>
-    © 2025 Harry O'Brien. Licensed under 
-    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a>.
-    </p>
-    
+    <footer>
+      <p>
+        © 2025 Harry O'Brien. Licensed under
+        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a>.
+      </p>
+    </footer>
   </main>
+
+  <script>
+    /* ---------- Menu (click + hover) ---------- */
+    const menu = document.getElementById('menu');
+    const menuBtn = document.getElementById('menuBtn');
+
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.classList.toggle('active');
+    });
+
+    document.addEventListener('click', () => menu.classList.remove('active'));
+
+    document.querySelectorAll('.menu-dropdown a').forEach((a) => {
+      a.addEventListener('click', () => menu.classList.remove('active'));
+    });
+
+    /* ---------- Glitch canvas in the banner ---------- */
+    const canvas = document.getElementById('glitch-canvas');
+    const ctx = canvas.getContext('2d');
+    const headerEl = document.querySelector('header');
+
+    let mouseX = 0, mouseY = 0, mouseInside = false;
+    let scrollY = 0;
+    let lastMouseMove = 0;
+
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = headerEl.offsetWidth * dpr;
+      canvas.height = headerEl.offsetHeight * dpr;
+      canvas.style.width = headerEl.offsetWidth + 'px';
+      canvas.style.height = headerEl.offsetHeight + 'px';
+      ctx.scale(dpr, dpr);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', () => {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      resizeCanvas();
+    });
+
+    headerEl.addEventListener('mousemove', (e) => {
+      const rect = headerEl.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+      mouseInside = true;
+      lastMouseMove = performance.now();
+    });
+    headerEl.addEventListener('mouseleave', () => { mouseInside = false; });
+
+    window.addEventListener('scroll', () => { scrollY = window.scrollY; }, { passive: true });
+
+    function drawGlitch() {
+      const w = headerEl.offsetWidth;
+      const h = headerEl.offsetHeight;
+      ctx.clearRect(0, 0, w, h);
+
+      // ---- Base static / noise ----
+      const baseDensity = 80;
+      for (let i = 0; i < baseDensity; i++) {
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+        const sw = Math.random() * 2 + 0.5;
+        const g = 100 + Math.floor(Math.random() * 120);
+        ctx.fillStyle = `rgba(${g}, ${g}, ${g}, ${Math.random() * 0.18})`;
+        ctx.fillRect(x, y, sw, sw);
+      }
+
+      // ---- Scanlines ----
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.025)';
+      for (let y = 0; y < h; y += 3) {
+        ctx.fillRect(0, y, w, 1);
+      }
+
+      // ---- Mouse-driven glitch bars ----
+      const mouseInfluence = mouseInside ? 1 : 0.25;
+      const numBars = 4;
+      for (let i = 0; i < numBars; i++) {
+        const t = performance.now() / 250;
+        const baseY = mouseInside ? mouseY : h / 2;
+        const yPos = (baseY + Math.sin(t + i * 1.7) * 60 + i * 18) % h;
+        const barHeight = 2 + Math.random() * 6 * mouseInfluence;
+        const offset = mouseInside ? (mouseX / w - 0.5) * 30 : 0;
+
+        const greyVal = 160 + Math.floor(Math.random() * 80);
+        ctx.fillStyle = `rgba(${greyVal}, ${greyVal}, ${greyVal}, ${0.06 + Math.random() * 0.12 * mouseInfluence})`;
+        ctx.fillRect(offset, yPos, w, barHeight);
+      }
+
+      // ---- Horizontal slice glitches (rare flickers) ----
+      if (Math.random() < 0.08 + (mouseInside ? 0.1 : 0)) {
+        const sliceY = Math.random() * h;
+        const sliceH = 3 + Math.random() * 12;
+        const shift = (Math.random() - 0.5) * 40 * (mouseInside ? 1.2 : 0.4);
+        ctx.fillStyle = `rgba(220, 220, 230, ${0.08 + Math.random() * 0.18})`;
+        ctx.fillRect(shift, sliceY, w, sliceH);
+      }
+
+      // ---- Scroll-reactive distortion (more glitch as you scroll past banner) ----
+      const scrollFactor = Math.min(scrollY / 200, 1);
+      if (scrollFactor > 0) {
+        const numBlocks = Math.floor(scrollFactor * 10);
+        for (let i = 0; i < numBlocks; i++) {
+          const bx = Math.random() * w;
+          const by = Math.random() * h;
+          const bw = 20 + Math.random() * 80;
+          const bh = 1 + Math.random() * 4;
+          ctx.fillStyle = `rgba(200, 200, 210, ${0.08 * scrollFactor})`;
+          ctx.fillRect(bx, by, bw, bh);
+        }
+      }
+
+      // ---- Soft halo near cursor ----
+      if (mouseInside) {
+        const grad = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 180);
+        grad.addColorStop(0, 'rgba(220, 220, 230, 0.10)');
+        grad.addColorStop(1, 'rgba(220, 220, 230, 0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+      }
+
+      requestAnimationFrame(drawGlitch);
+    }
+    drawGlitch();
+
+    /* ---------- Subtle parallax on background orbs ---------- */
+    const orb1 = document.querySelector('.orb-1');
+    const orb2 = document.querySelector('.orb-2');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (orb1) orb1.style.transform = `translateY(${y * 0.15}px)`;
+      if (orb2) orb2.style.transform = `translateY(${y * -0.1}px)`;
+    }, { passive: true });
+  </script>
 </body>
 </html>
