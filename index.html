@@ -85,7 +85,7 @@
     header {
       position: relative;
       height: 280px;
-      background: linear-gradient(180deg, #050507 0%, #0c0c10 100%);
+      background: #050507;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -94,13 +94,11 @@
       overflow: hidden;
     }
 
-    #glitch-canvas {
+    #static-canvas {
       position: absolute;
       inset: 0;
       width: 100%; height: 100%;
       z-index: 1;
-      opacity: 0.55;
-      mix-blend-mode: screen;
       pointer-events: none;
     }
 
@@ -315,54 +313,14 @@
       text-decoration: none;
     }
 
-    /* Score placeholder card (for acoustic works without an image) */
-    .score-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background:
-        linear-gradient(135deg, #1a1a1f 0%, #25252b 100%);
-      color: var(--grey-2);
-      text-decoration: none;
-      letter-spacing: 3px;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      transition: all 0.35s ease;
-      position: relative;
+    /* Image link hover effect for scores/code */
+    .composition-media a img {
+      transition: transform 0.5s ease, filter 0.5s ease;
     }
 
-    .score-placeholder::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        repeating-linear-gradient(0deg,
-          transparent 0px,
-          transparent 24px,
-          rgba(255, 255, 255, 0.02) 24px,
-          rgba(255, 255, 255, 0.02) 25px);
-      pointer-events: none;
-    }
-
-    .score-placeholder span {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
-      color: var(--grey-1);
-      margin-bottom: 0.5rem;
-      letter-spacing: 4px;
-    }
-
-    .score-placeholder small {
-      font-size: 0.7rem;
-      color: var(--grey-3);
-      letter-spacing: 2px;
-    }
-
-    .score-placeholder:hover {
-      background: linear-gradient(135deg, #1f1f24 0%, #2c2c32 100%);
+    .composition-media a:hover img {
+      transform: scale(1.04);
+      filter: brightness(1.1);
     }
 
     /* Audio styling */
@@ -400,6 +358,91 @@
     .gallery-item:hover img {
       filter: grayscale(0) brightness(1);
       transform: scale(1.04);
+    }
+
+    .gallery-item {
+      cursor: pointer;
+    }
+
+    /* ---------- Lightbox ---------- */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 7, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-image {
+      max-width: 75vw;
+      max-height: 75vh;
+      object-fit: contain;
+      border: 1px solid var(--grey-5);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      user-select: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .lightbox-btn {
+      position: absolute;
+      background: rgba(20, 20, 24, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--grey-5);
+      color: var(--grey-1);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .lightbox-btn:hover {
+      background: rgba(40, 40, 48, 0.85);
+      border-color: var(--grey-3);
+    }
+
+    .lightbox-close {
+      top: 1.5rem;
+      right: 2rem;
+      width: 48px;
+      height: 48px;
+      font-size: 1.4rem;
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .lightbox-prev,
+    .lightbox-next {
+      top: 50%;
+      transform: translateY(-50%);
+      width: 56px;
+      height: 56px;
+      font-size: 1.6rem;
+      font-weight: 300;
+    }
+
+    .lightbox-prev { left: 2rem; }
+    .lightbox-next { right: 2rem; }
+
+    @media (max-width: 768px) {
+      .lightbox-image { max-width: 90vw; max-height: 70vh; }
+      .lightbox-prev { left: 0.75rem; width: 44px; height: 44px; }
+      .lightbox-next { right: 0.75rem; width: 44px; height: 44px; }
+      .lightbox-close { top: 1rem; right: 1rem; width: 42px; height: 42px; }
     }
 
     /* ---------- Footer ---------- */
@@ -458,9 +501,9 @@
     </nav>
   </div>
 
-  <!-- Header / banner with glitch -->
+  <!-- Header / banner with TV static -->
   <header>
-    <canvas id="glitch-canvas"></canvas>
+    <canvas id="static-canvas"></canvas>
     <div class="header-content">
       <div class="name">HARRY O'BRIEN</div>
       <div class="title">Composer Portfolio</div>
@@ -498,10 +541,10 @@
         <h3 class="composition-title">Plane Desaturation</h3>
         <div class="composition-body">
           <div class="composition-text">
-            <p>Desaturation explores the relationship between transport networks and electronic composition techniques</p>
+            <p>Desaturation is a piece that explores the influence of public transport on electronic music</p>
           </div>
           <div class="composition-media">
-            <iframe src="https://www.youtube.com/embed/B3FgZ48Ijgc" title="Plain Desaturation" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/B3FgZ48Ijgc" title="Desaturation" allowfullscreen></iframe>
           </div>
         </div>
       </div>
@@ -510,6 +553,20 @@
     <div class="divider"></div>
 
     <!-- Acoustic Works -->
+    <!--
+      ============================================================
+      HOW TO ADD/CHANGE IMAGES FOR ACOUSTIC WORKS:
+      ============================================================
+      1. Place your image file inside the "Scores/" folder in your repo.
+         (Create the folder if it doesn't exist.)
+         Example filenames: Scores/disc-temp.jpg, Scores/two-pencils.jpg
+      2. In the <img> tag below, change the src="..." path to point
+         to your image (e.g. src="Scores/disc-temp.jpg").
+      3. To change WHERE the image links to (the download URL), edit
+         the href="..." attribute on the <a> tag wrapping the image.
+      4. The alt="..." text is for accessibility — describe the image briefly.
+      ============================================================
+    -->
     <section id="acoustic-works">
       <h2 class="section-title">Acoustic Works</h2>
 
@@ -520,12 +577,10 @@
             <p>[Add a short description of Disc...Temp... here.]</p>
           </div>
           <div class="composition-media">
+            <!-- EDIT href BELOW to change the download/link target -->
             <a href="https://github.com/HC-OBrien/Compositions.github.io/releases/download/Disc_Temp/Disc.Temp.pdf" target="_blank" rel="noopener">
-              <!-- Swap this <div> for <img src="Scores/disc-temp-thumb.jpg" alt="..."> when you have artwork -->
-              <div class="score-placeholder">
-                <span>Disc...Temp...</span>
-                <small>View Score</small>
-              </div>
+              <!-- EDIT src BELOW to point to your uploaded image -->
+              <img src="Scores/disc-temp.jpg" alt="Disc...Temp... score preview">
             </a>
           </div>
         </div>
@@ -538,11 +593,10 @@
             <p>[Add a short description of Two Pencils here.]</p>
           </div>
           <div class="composition-media">
+            <!-- EDIT href BELOW to change the download/link target -->
             <a href="https://github.com/HC-OBrien/Compositions.github.io/releases/download/Two_Pencils/Two.Pencils.pdf" target="_blank" rel="noopener">
-              <div class="score-placeholder">
-                <span>Two Pencils</span>
-                <small>View Score</small>
-              </div>
+              <!-- EDIT src BELOW to point to your uploaded image -->
+              <img src="Scores/two-pencils.jpg" alt="Two Pencils score preview">
             </a>
           </div>
         </div>
@@ -552,6 +606,22 @@
     <div class="divider"></div>
 
     <!-- Code -->
+    <!--
+      ============================================================
+      HOW TO ADD/CHANGE IMAGES FOR CODE PROJECTS:
+      ============================================================
+      1. Place your image file inside the "Code/" folder in your repo.
+         (Create the folder if it doesn't exist.)
+         Example filename: Code/sonamic.jpg
+      2. In the <img> tag below, change the src="..." path to point
+         to your image (e.g. src="Code/sonamic.jpg").
+      3. To change WHERE the image links to (the project URL, e.g. the
+         Sonamic GitHub page), edit the href="..." attribute on the
+         <a> tag wrapping the image. Replace "#" with the real URL,
+         e.g. href="https://github.com/HC-OBrien/Sonamic"
+      4. The alt="..." text is for accessibility — describe the image briefly.
+      ============================================================
+    -->
     <section id="code">
       <h2 class="section-title">Code</h2>
 
@@ -562,11 +632,10 @@
             <p>Sonamic is an open-source application that displays sonifications and visualisations of dynamic optimisation algorithms, so that users may better understand their algorithmic behaviours.</p>
           </div>
           <div class="composition-media">
+            <!-- EDIT href BELOW: replace "#" with the Sonamic GitHub URL -->
             <a href="#" target="_blank" rel="noopener">
-              <div class="score-placeholder">
-                <span>Sonamic</span>
-                <small>View Project</small>
-              </div>
+              <!-- EDIT src BELOW to point to your uploaded image -->
+              <img src="Code/sonamic.jpg" alt="Sonamic project preview">
             </a>
           </div>
         </div>
@@ -599,6 +668,14 @@
     </footer>
   </main>
 
+  <!-- Lightbox overlay -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Gallery viewer">
+    <button class="lightbox-btn lightbox-close" id="lightboxClose" aria-label="Close">×</button>
+    <button class="lightbox-btn lightbox-prev" id="lightboxPrev" aria-label="Previous image">‹</button>
+    <img class="lightbox-image" id="lightboxImage" alt="">
+    <button class="lightbox-btn lightbox-next" id="lightboxNext" aria-label="Next image">›</button>
+  </div>
+
   <script>
     /* ---------- Menu (click + hover) ---------- */
     const menu = document.getElementById('menu');
@@ -615,112 +692,78 @@
       a.addEventListener('click', () => menu.classList.remove('active'));
     });
 
-    /* ---------- Glitch canvas in the banner ---------- */
-    const canvas = document.getElementById('glitch-canvas');
+    /* ---------- TV static canvas in the banner ---------- */
+    const canvas = document.getElementById('static-canvas');
     const ctx = canvas.getContext('2d');
     const headerEl = document.querySelector('header');
 
-    let mouseX = 0, mouseY = 0, mouseInside = false;
-    let scrollY = 0;
-    let lastMouseMove = 0;
+    let mouseX = -9999, mouseY = -9999, mouseInside = false;
+
+    // Tunable parameters — tweak these to taste:
+    const BASE_DIM = 0.08;        // overall dim level when mouse is away (0–1, lower = darker)
+    const HOVER_BRIGHTNESS = 0.22; // brightness right at the cursor (0–1) — keep close to BASE_DIM for a subtle effect
+    const HOVER_RADIUS = 200;     // radius (px) of the brightened area around the cursor
 
     function resizeCanvas() {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = headerEl.offsetWidth * dpr;
-      canvas.height = headerEl.offsetHeight * dpr;
-      canvas.style.width = headerEl.offsetWidth + 'px';
-      canvas.style.height = headerEl.offsetHeight + 'px';
-      ctx.scale(dpr, dpr);
+      canvas.width = headerEl.offsetWidth;
+      canvas.height = headerEl.offsetHeight;
     }
     resizeCanvas();
-    window.addEventListener('resize', () => {
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      resizeCanvas();
-    });
+    window.addEventListener('resize', resizeCanvas);
 
     headerEl.addEventListener('mousemove', (e) => {
       const rect = headerEl.getBoundingClientRect();
       mouseX = e.clientX - rect.left;
       mouseY = e.clientY - rect.top;
       mouseInside = true;
-      lastMouseMove = performance.now();
     });
-    headerEl.addEventListener('mouseleave', () => { mouseInside = false; });
+    headerEl.addEventListener('mouseleave', () => {
+      mouseInside = false;
+      mouseX = -9999;
+      mouseY = -9999;
+    });
 
-    window.addEventListener('scroll', () => { scrollY = window.scrollY; }, { passive: true });
+    function drawStatic() {
+      const w = canvas.width;
+      const h = canvas.height;
 
-    function drawGlitch() {
-      const w = headerEl.offsetWidth;
-      const h = headerEl.offsetHeight;
-      ctx.clearRect(0, 0, w, h);
+      // Generate raw white-noise image data
+      const imageData = ctx.createImageData(w, h);
+      const data = imageData.data;
 
-      // ---- Base static / noise ----
-      const baseDensity = 80;
-      for (let i = 0; i < baseDensity; i++) {
-        const x = Math.random() * w;
-        const y = Math.random() * h;
-        const sw = Math.random() * 2 + 0.5;
-        const g = 100 + Math.floor(Math.random() * 120);
-        ctx.fillStyle = `rgba(${g}, ${g}, ${g}, ${Math.random() * 0.18})`;
-        ctx.fillRect(x, y, sw, sw);
-      }
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const i = (y * w + x) * 4;
 
-      // ---- Scanlines ----
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.025)';
-      for (let y = 0; y < h; y += 3) {
-        ctx.fillRect(0, y, w, 1);
-      }
+          // Random grey value (white noise)
+          const noise = Math.random() * 255;
 
-      // ---- Mouse-driven glitch bars ----
-      const mouseInfluence = mouseInside ? 1 : 0.25;
-      const numBars = 4;
-      for (let i = 0; i < numBars; i++) {
-        const t = performance.now() / 250;
-        const baseY = mouseInside ? mouseY : h / 2;
-        const yPos = (baseY + Math.sin(t + i * 1.7) * 60 + i * 18) % h;
-        const barHeight = 2 + Math.random() * 6 * mouseInfluence;
-        const offset = mouseInside ? (mouseX / w - 0.5) * 30 : 0;
+          // Determine brightness multiplier based on distance to cursor
+          let brightness = BASE_DIM;
+          if (mouseInside) {
+            const dx = x - mouseX;
+            const dy = y - mouseY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < HOVER_RADIUS) {
+              // Smooth falloff from cursor centre to edge of radius
+              const falloff = 1 - (dist / HOVER_RADIUS);
+              const eased = falloff * falloff; // quadratic ease-out
+              brightness = BASE_DIM + (HOVER_BRIGHTNESS - BASE_DIM) * eased;
+            }
+          }
 
-        const greyVal = 160 + Math.floor(Math.random() * 80);
-        ctx.fillStyle = `rgba(${greyVal}, ${greyVal}, ${greyVal}, ${0.06 + Math.random() * 0.12 * mouseInfluence})`;
-        ctx.fillRect(offset, yPos, w, barHeight);
-      }
-
-      // ---- Horizontal slice glitches (rare flickers) ----
-      if (Math.random() < 0.08 + (mouseInside ? 0.1 : 0)) {
-        const sliceY = Math.random() * h;
-        const sliceH = 3 + Math.random() * 12;
-        const shift = (Math.random() - 0.5) * 40 * (mouseInside ? 1.2 : 0.4);
-        ctx.fillStyle = `rgba(220, 220, 230, ${0.08 + Math.random() * 0.18})`;
-        ctx.fillRect(shift, sliceY, w, sliceH);
-      }
-
-      // ---- Scroll-reactive distortion (more glitch as you scroll past banner) ----
-      const scrollFactor = Math.min(scrollY / 200, 1);
-      if (scrollFactor > 0) {
-        const numBlocks = Math.floor(scrollFactor * 10);
-        for (let i = 0; i < numBlocks; i++) {
-          const bx = Math.random() * w;
-          const by = Math.random() * h;
-          const bw = 20 + Math.random() * 80;
-          const bh = 1 + Math.random() * 4;
-          ctx.fillStyle = `rgba(200, 200, 210, ${0.08 * scrollFactor})`;
-          ctx.fillRect(bx, by, bw, bh);
+          const value = noise * brightness;
+          data[i]     = value; // R
+          data[i + 1] = value; // G
+          data[i + 2] = value; // B
+          data[i + 3] = 255;   // A
         }
       }
 
-      // ---- Soft halo near cursor ----
-      if (mouseInside) {
-        const grad = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 180);
-        grad.addColorStop(0, 'rgba(220, 220, 230, 0.10)');
-        grad.addColorStop(1, 'rgba(220, 220, 230, 0)');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, w, h);
-      }
-
-      requestAnimationFrame(drawGlitch);
+      ctx.putImageData(imageData, 0, 0);
+      requestAnimationFrame(drawStatic);
     }
-    drawGlitch();
+    drawStatic();
 
     /* ---------- Subtle parallax on background orbs ---------- */
     const orb1 = document.querySelector('.orb-1');
@@ -730,6 +773,77 @@
       if (orb1) orb1.style.transform = `translateY(${y * 0.15}px)`;
       if (orb2) orb2.style.transform = `translateY(${y * -0.1}px)`;
     }, { passive: true });
+
+    /* ---------- Gallery Lightbox ---------- */
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    const galleryItems = document.querySelectorAll('.gallery-item img');
+
+    // Build an array of image sources and alt text from the gallery
+    const galleryImages = Array.from(galleryItems).map((img) => ({
+      src: img.src,
+      alt: img.alt,
+    }));
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      updateLightboxImage();
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden'; // prevent background scroll
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function updateLightboxImage() {
+      const img = galleryImages[currentIndex];
+      // Brief fade for a smoother transition between images
+      lightboxImage.style.opacity = '0';
+      setTimeout(() => {
+        lightboxImage.src = img.src;
+        lightboxImage.alt = img.alt;
+        lightboxImage.style.opacity = '1';
+      }, 120);
+    }
+
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+      updateLightboxImage();
+    }
+
+    function showNext() {
+      currentIndex = (currentIndex + 1) % galleryImages.length;
+      updateLightboxImage();
+    }
+
+    // Wire up gallery clicks
+    galleryItems.forEach((img, i) => {
+      img.addEventListener('click', () => openLightbox(i));
+    });
+
+    // Wire up lightbox controls
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxPrev.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+    lightboxNext.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+
+    // Click outside the image (on the dark backdrop) to close
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    // Keyboard navigation: Esc to close, arrows to navigate
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') showPrev();
+      else if (e.key === 'ArrowRight') showNext();
+    });
   </script>
 </body>
 </html>
